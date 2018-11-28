@@ -1,0 +1,11 @@
+﻿  Game.cpp
+e:\uni\3dgamesprogramming\gameengine\src\game.cpp(17): warning C4305: 'initializing': truncation from 'double' to 'float'
+e:\uni\3dgamesprogramming\gameengine\src\game.cpp(111): warning C4018: '<': signed/unsigned mismatch
+e:\uni\3dgamesprogramming\gameengine\src\game.cpp(134): warning C4018: '<': signed/unsigned mismatch
+e:\uni\3dgamesprogramming\gameengine\src\game.cpp(138): warning C4018: '<': signed/unsigned mismatch
+  triangle.vcxproj -> E:\Uni\3DGamesProgramming\GameEngine\legacy\Debug\triangle.exe
+  triangle.vcxproj -> E:\Uni\3DGamesProgramming\GameEngine\legacy\Debug\triangle.pdb (Partial PDB)
+  ..\contrib\msvc-windows-x86\SDL2\bin\SDL2.dll
+          1 file(s) copied.
+  ..\contrib\msvc-windows-x86\glew\bin\glew32.dll
+          1 file(s) copied.
