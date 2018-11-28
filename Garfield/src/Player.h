@@ -4,11 +4,12 @@
 
 class Transform;
 class Camera;
+class Entity;
 
 class Player {
 public:
 
-	Player(Camera * _camera, Transform * _transform, float _movementSpeed);
+	Player(Entity * _PlayerEntity, Transform * _transform, float _movementSpeed,float _rotationSpeed);
 
 	void Update();
 
@@ -16,8 +17,10 @@ public:
 	glm::vec3 right;
 
 private:
-
+	glm::vec3 movtemp;
+	Entity * PlayerEntity;
 	Camera * camera;
 	Transform * transform;
 	float movementSpeed;
+	float rotationSpeed;
 };

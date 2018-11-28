@@ -68,20 +68,20 @@ Game::Game()
 
 
 	//create camera
-	Camera* mainCamera = new Camera(shaders, new Transform(glm::vec3(0, 1, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)));
-
-	// create player
-	Player* player = new Player(mainCamera, new Transform(glm::vec3(0, 1, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)), 0.21f);
+	Camera* mainCamera = new Camera(shaders, new Transform(glm::vec3(0, 3, 0.0f), glm::vec3(0.0f, 0, 0), glm::vec3(1, 1, 1)));
 
 	//create entities
 	//entities.push_back(new Entity(new Texture("../low_poly_grass2.png"), new VertexArray("../grass_low_poly.obj"), new Transform(glm::vec3(0, 0, -30.0f), glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1)), 24.0f, shaders.at(2)));
 
 	entities.push_back(new Entity(new Texture("../re_hall_diffuse.png"), new VertexArray("../re_hall_baked.obj"), new Transform(glm::vec3(2.0f, -2.0f, -16.0f), glm::vec3(0, 90.0f, 0), glm::vec3(1.0, 1.0, 1.0)),0.0f, shaders.at(1)));
 	//entities.push_back(new Entity(new Texture("../curuthers_diffuse.png"), new VertexArray("../curuthers.obj"), new Transform(glm::vec3(0, -2.1f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(1.0, 1.0, 1.0)),32.0f, shaders.at(2)));
-	entities.push_back(new Entity(new Texture("../garfield.png"), new VertexArray("../garfield.obj"), new Transform(glm::vec3(0, 4.0f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(2)));
+	entities.push_back(new Entity(new Texture("../garfield.png"), new VertexArray("../garfield.obj"), new Transform(glm::vec3(0, -4, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(2)));
 	entities.push_back(new Entity(new Texture("../lasagne.png"), new VertexArray("../lasagne.obj"), new Transform(glm::vec3(0, -2.1f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1)), 16.0f, shaders.at(2)));
+	
+	// create player
+	Player* player = new Player(entities.at(1), new Transform(glm::vec3(0, -4.0f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 0.21f,10.0f);
+	
 	// Start the Game Loop
-
 	while (!quit)
 	{
 		SDL_Event event = { 0 };
@@ -128,16 +128,15 @@ Game::Game()
 
 
 
-
+		for (int i = 0; i < entities.size(); i++)
+		{
+			entities.at(2)->transform->setRotation(glm::vec3(entities.at(2)->transform->getRotation().x, entities.at(2)->transform->getRotation().y + 0.1, entities.at(2)->transform->getRotation().z));
+		}
 
 		//draw house
 		for (int i = 0; i < entities.size(); i++)
 		{
 			entities.at(i)->draw(rendTex);
-		}
-		for (int i = 1; i < entities.size(); i++)
-		{
-			entities.at(i)->transform->setRotation(glm::vec3(entities.at(i)->transform->getRotation().x, entities.at(i)->transform->getRotation().y + 0.6, entities.at(i)->transform->getRotation().z));
 		}
 		glDisable(GL_DEPTH_TEST);
 		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);

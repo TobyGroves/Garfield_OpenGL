@@ -1,18 +1,19 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Transform.h"
-
+#include "Entity.h"
 #include <iostream>
 
 
 
 
 
-Player::Player(Camera * _camera, Transform * _transform, float _movementSpeed)
+Player::Player(Entity * _PlayerEntity, Transform * _transform, float _movementSpeed,float _rotationSpeed)
 {
-	camera = _camera;
+	PlayerEntity = _PlayerEntity;
 	transform = _transform;
 	movementSpeed = _movementSpeed;
+	rotationSpeed = _rotationSpeed;
 	Transform * transform = new Transform(glm::vec3(0, 1, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
 
 }
@@ -20,8 +21,6 @@ Player::Player(Camera * _camera, Transform * _transform, float _movementSpeed)
 void Player::Update()
 {
 	////////// MOVING  //////////////
-
-	//including Psudeo player 
 
 	glm::mat4 t(1.0f);
 
@@ -50,41 +49,37 @@ void Player::Update()
 
 	if (state[SDL_SCANCODE_W])
 	{
-		glm::vec3 playerPos = transform->getPosition();
-
-		std::cout << "Forward" << std::endl;
-
-		transform->setPosition(playerPos - (fwd * movementSpeed));
+		//forward
+		movtemp = transform->getPosition();
+		movtemp += movementSpeed * fwd;
+		transform->setPosition(movtemp);
 	}
 	if (state[SDL_SCANCODE_A])
 	{
-		glm::vec3 playerPos = transform->getPosition();
-
-		std::cout << "Left" << std::endl;
-
-		transform->setPosition(playerPos -(right * movementSpeed));
+		//rotate left
+		movtemp = transform->getRotation();
+		movtemp = glm::vec3(movtemp.x, movtemp.y + rotationSpeed, movtemp.z);
+		transform->setRotation(movtemp);
 	}
 	if (state[SDL_SCANCODE_S])
 	{
-		glm::vec3 playerPos = transform->getPosition();
-
-		std::cout << "Right" << std::endl;
-
-		transform->setPosition(playerPos + (fwd * movementSpeed));
+		// backward
+		movtemp = transform->getPosition();
+		movtemp -= movementSpeed * fwd;
+		transform->setPosition(movtemp);
 	}
 	if (state[SDL_SCANCODE_D])
 	{
-		glm::vec3 playerPos = transform->getPosition();
-
-		std::cout << "Backward" << std::endl;
-
-		transform->setPosition(playerPos + (right * movementSpeed));
+		//Rotate right
+		movtemp = transform->getRotation();
+		movtemp = glm::vec3(movtemp.x, movtemp.y - rotationSpeed, movtemp.z);
+		transform->setRotation(movtemp);
 	}
 
 
-	camera->transform->setPosition(transform->getPosition());
-	camera->transform->setRotation(transform->getRotation());
-	camera->transform->setScale(transform->getScale());
+	PlayerEntity->transform->setPosition(transform->getPosition());
+	PlayerEntity->transform->setRotation(transform->getRotation());
+	PlayerEntity->transform->setScale(transform->getScale());
 
 
 
