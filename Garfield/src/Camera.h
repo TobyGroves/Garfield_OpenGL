@@ -3,6 +3,7 @@
 #include <glm/ext.hpp>
 #include <vector>
 #include <exception>
+#include <memory>
 
 class ShaderProgram;
 class Transform;
@@ -10,13 +11,13 @@ class Transform;
 class Camera
 {
 public:
-	Camera(std::vector<ShaderProgram*> _shaders, Transform * _transform);
+	Camera(std::vector<std::shared_ptr<ShaderProgram>> _shaders, Transform * _transform);
 
 	void update();
 
 	Transform * transform;
 
-	std::vector<ShaderProgram *> shaders;
+	std::vector<std::shared_ptr<ShaderProgram>> shaders;
 
 
 };

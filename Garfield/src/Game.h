@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "RenderTexture.h"
 #include <vector>
+#include <memory>
 
 class RenderTexture;
 class Texture;
@@ -13,20 +14,15 @@ class Game
 
 public:
 	Game();
-	VertexArray *hallShape;
-	Texture *hallTexture;
-	VertexArray *shape;
-	Texture *texture;
-	std::vector<ShaderProgram *> shaders;
-	std::vector<ShaderProgram *> postShaders;
+	std::vector<std::shared_ptr<ShaderProgram>> shaders;
+	std::vector<std::shared_ptr<ShaderProgram>> postShaders;
 	std::vector<Entity *> entities;
-	RenderTexture *rendTex;
-	RenderTexture *lightkeyRendTex;
-	RenderTexture *blurRendTex;
-	RenderTexture *blur2RendTex;
-	RenderTexture *blur3RendTex;
-	RenderTexture *mergeRendTex;
-
+	std::shared_ptr<RenderTexture> rendTex;
+	std::shared_ptr<RenderTexture> lightkeyRendTex;
+	std::shared_ptr<RenderTexture> blurRendTex;
+	std::shared_ptr<RenderTexture> blur2RendTex;
+	std::shared_ptr<RenderTexture> blur3RendTex;
+	std::shared_ptr<RenderTexture> mergeRendTex;
 
 
 };

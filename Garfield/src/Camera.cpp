@@ -10,7 +10,7 @@
 
 #include <exception>
 
-Camera::Camera(std::vector<ShaderProgram *>  _shaders, Transform * _transform)
+Camera::Camera(std::vector<std::shared_ptr<ShaderProgram>>  _shaders, Transform * _transform)
 {
 	shaders = _shaders;
 	transform = _transform;

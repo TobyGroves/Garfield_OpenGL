@@ -13,14 +13,11 @@ TODO MAKE TIME WITH DELTA TIME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 */
 
-
-float moveAmmount = 0.1;
+float moveAmmount = 0.05;
 int windowWidth = 1800;
 int windowHeight = 1000;
 float Xmov = 0;
 float Ymov = 0;
-
-
 
 Game::Game()
 {
@@ -48,21 +45,22 @@ Game::Game()
 	float angle = 0;
 	// create shaders
 
-	shaders.push_back(new ShaderProgram("../simple.vert", "../simple.frag"));
-	shaders.push_back(new ShaderProgram("../light.vert", "../light.frag"));
-	shaders.push_back(new ShaderProgram("../lightspecdiff.vert", "../lightspecdiff.frag"));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../light.vert", "../light.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightspecdiff.vert", "../lightspecdiff.frag")));
 	
-	postShaders.push_back(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag"));
-	postShaders.push_back(new ShaderProgram("../blur.vert", "../blur.frag"));
-	postShaders.push_back(new ShaderProgram("../mergepass.vert", "../mergepass.frag"));
-	postShaders.push_back(new ShaderProgram("../nullpass.vert", "../nullpass.frag"));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../blur.vert", "../blur.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../mergepass.vert", "../mergepass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../nullpass.vert", "../nullpass.frag")));
 
-	rendTex = new RenderTexture(1800, 1000);
-	lightkeyRendTex = new RenderTexture(1800, 1000);
-	blurRendTex = new RenderTexture(1800, 1000);
-	blur2RendTex = new RenderTexture(1800, 1000);
-	blur3RendTex = new RenderTexture(1800, 1000);
-	mergeRendTex = new RenderTexture(1800, 1000);
+	rendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	lightkeyRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	blurRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	blur2RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	blur3RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	//mergeRendTex (new RenderTexture(1800, 1000));
+	mergeRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
 
 
 
@@ -76,7 +74,7 @@ Game::Game()
 	entities.push_back(new Entity(new Texture("../re_hall_diffuse.png"), new VertexArray("../re_hall_baked.obj"), new Transform(glm::vec3(2.0f, -2.0f, -16.0f), glm::vec3(0, 90.0f, 0), glm::vec3(1.0, 1.0, 1.0)),0.0f, shaders.at(1)));
 	//entities.push_back(new Entity(new Texture("../curuthers_diffuse.png"), new VertexArray("../curuthers.obj"), new Transform(glm::vec3(0, -2.1f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(1.0, 1.0, 1.0)),32.0f, shaders.at(2)));
 	entities.push_back(new Entity(new Texture("../garfield.png"), new VertexArray("../garfield.obj"), new Transform(glm::vec3(0, -4, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(2)));
-	entities.push_back(new Entity(new Texture("../lasagne.png"), new VertexArray("../lasagne.obj"), new Transform(glm::vec3(0, -2.1f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1)), 16.0f, shaders.at(2)));
+	entities.push_back(new Entity(new Texture("../lasagne.png"), new VertexArray("../lasagne.obj"), new Transform(glm::vec3(0, -4, -20.0f), glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1)), 16.0f, shaders.at(2)));
 	
 	// create player
 	Player* player = new Player(entities.at(1), new Transform(glm::vec3(0, -4.0f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 0.21f,10.0f);
@@ -160,7 +158,6 @@ Game::Game()
 		postShaders.at(2)->setUniform("in_TextureA", rendTex);
 		postShaders.at(2)->setUniform("in_TextureB", blur3RendTex);
 		postShaders.at(2)->draw(mergeRendTex);
-
 
 		//draw to screen
 
