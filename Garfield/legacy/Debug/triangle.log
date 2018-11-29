@@ -1,10 +1,9 @@
 ﻿  Game.cpp
-e:\uni\garfield_opengl\garfield\src\game.cpp(17): warning C4305: 'initializing': truncation from 'double' to 'float'
-e:\uni\garfield_opengl\garfield\src\game.cpp(111): warning C4018: '<': signed/unsigned mismatch
-e:\uni\garfield_opengl\garfield\src\game.cpp(131): warning C4018: '<': signed/unsigned mismatch
-e:\uni\garfield_opengl\garfield\src\game.cpp(137): warning C4018: '<': signed/unsigned mismatch
-  triangle.vcxproj -> E:\Uni\Garfield_OpenGL\Garfield\legacy\Debug\triangle.exe
-  triangle.vcxproj -> E:\Uni\Garfield_OpenGL\Garfield\legacy\Debug\triangle.pdb (Partial PDB)
+c:\garfield_opengl\garfield\src\game.cpp(17): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\garfield_opengl\garfield\src\game.cpp(111): warning C4018: '<': signed/unsigned mismatch
+c:\garfield_opengl\garfield\src\game.cpp(131): warning C4018: '<': signed/unsigned mismatch
+c:\garfield_opengl\garfield\src\game.cpp(137): warning C4018: '<': signed/unsigned mismatch
+  triangle.vcxproj -> C:\Garfield_OpenGL\Garfield\legacy\Debug\triangle.exe
   ..\contrib\msvc-windows-x86\SDL2\bin\SDL2.dll
           1 file(s) copied.
   ..\contrib\msvc-windows-x86\glew\bin\glew32.dll
