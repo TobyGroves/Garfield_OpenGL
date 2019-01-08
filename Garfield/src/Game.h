@@ -3,6 +3,8 @@
 #include "ShaderProgram.h"
 #include "Entity.h"
 #include "RenderTexture.h"
+#include "Camera.h"
+#include "Player.h"
 #include <vector>
 #include <memory>
 
@@ -13,10 +15,15 @@ class Game
 {
 
 public:
+	Player* player = nullptr;
+	Camera* mainCamera = nullptr;
+
 	Game();
+
 	std::vector<std::shared_ptr<ShaderProgram>> shaders;
 	std::vector<std::shared_ptr<ShaderProgram>> postShaders;
 	std::vector<Entity *> entities;
+	std::vector<std::shared_ptr<Entity>> GUI;
 	std::shared_ptr<RenderTexture> rendTex;
 	std::shared_ptr<RenderTexture> lightkeyRendTex;
 	std::shared_ptr<RenderTexture> blurRendTex;
@@ -24,5 +31,8 @@ public:
 	std::shared_ptr<RenderTexture> blur3RendTex;
 	std::shared_ptr<RenderTexture> mergeRendTex;
 
+	std::shared_ptr<ShaderProgram> orthoShad;
+
+	void gameLoop();
 
 };

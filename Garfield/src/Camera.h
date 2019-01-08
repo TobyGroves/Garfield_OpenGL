@@ -4,6 +4,8 @@
 #include <vector>
 #include <exception>
 #include <memory>
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp> 
 
 class ShaderProgram;
 class Transform;
@@ -17,6 +19,8 @@ public:
 
 	Transform * transform;
 
+	glm::vec3 camPos;
+	
 	std::vector<std::shared_ptr<ShaderProgram>> shaders;
 
 

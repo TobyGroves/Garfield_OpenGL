@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="shader%27s">
+      <UniqueIdentifier>{b68ab418-7901-4705-a2cb-38e87fab39c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -83,5 +86,55 @@
     <ClInclude Include="..\src\RenderTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\blur.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\blur.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\light.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\light.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\lightkeypass.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\lightkeypass.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\lightspecdiff.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\lightspecdiff.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\mergepass.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\mergepass.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\nullpass.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\nullpass.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\simple.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\simple.vert">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\lightsdnorm.frag">
+      <Filter>shader%27s</Filter>
+    </None>
+    <None Include="..\lightsdnorm.vert">
+      <Filter>shader%27s</Filter>
+    </None>
   </ItemGroup>
 </Project>

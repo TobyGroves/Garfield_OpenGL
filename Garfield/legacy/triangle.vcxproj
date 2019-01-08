@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{31569A47-1A1D-477B-B003-BB0E5F571787}</ProjectGuid>
     <RootNamespace>triangle</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -159,6 +159,24 @@ copy ..\contrib\msvc-windows-x86\glew\bin\*.dll $(OutputPath)</Command>
     <ClInclude Include="..\src\Transform.h" />
     <ClInclude Include="..\src\VertexArray.h" />
     <ClInclude Include="..\src\VertexBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\blur.frag" />
+    <None Include="..\blur.vert" />
+    <None Include="..\light.frag" />
+    <None Include="..\light.vert" />
+    <None Include="..\lightkeypass.frag" />
+    <None Include="..\lightkeypass.vert" />
+    <None Include="..\lightsdnorm.frag" />
+    <None Include="..\lightsdnorm.vert" />
+    <None Include="..\lightspecdiff.frag" />
+    <None Include="..\lightspecdiff.vert" />
+    <None Include="..\mergepass.frag" />
+    <None Include="..\mergepass.vert" />
+    <None Include="..\nullpass.frag" />
+    <None Include="..\nullpass.vert" />
+    <None Include="..\simple.frag" />
+    <None Include="..\simple.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,19 +1,20 @@
 #include"Game.h"
-#include "Camera.h"
-#include "Player.h"
 #include "transform.h"
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <glm/ext.hpp>
+#include <glm/glm.hpp>
 #include <exception>
+#include <memory>
+#include <iostream>
 
 /*
 
-TODO MAKE TIME WITH DELTA TIME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+TODO MAKE TIME WITH DELTA TIME !
 
 */
 
-float moveAmmount = 0.05;
+float moveAmmount = 0.01f;
 int windowWidth = 1800;
 int windowHeight = 1000;
 float Xmov = 0;
@@ -26,7 +27,7 @@ Game::Game()
 		throw std::exception();
 	}
 
-	SDL_Window *window = SDL_CreateWindow("Game Engine",
+	SDL_Window *window = SDL_CreateWindow("Game Engine Garfield Demo",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		windowWidth, windowHeight,
 		SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -48,6 +49,10 @@ Game::Game()
 	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag")));
 	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../light.vert", "../light.frag")));
 	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightspecdiff.vert", "../lightspecdiff.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightsdnorm.vert", "../lightsdnorm.frag")));
+
+	orthoShad = std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag"));
+
 	
 	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag")));
 	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../blur.vert", "../blur.frag")));
@@ -59,25 +64,40 @@ Game::Game()
 	blurRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
 	blur2RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
 	blur3RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
-	//mergeRendTex (new RenderTexture(1800, 1000));
 	mergeRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
 
 
 
 
 	//create camera
-	Camera* mainCamera = new Camera(shaders, new Transform(glm::vec3(0, 3, 0.0f), glm::vec3(0.0f, 0, 0), glm::vec3(1, 1, 1)));
+	mainCamera = new Camera(shaders, new Transform(glm::vec3(0, 3, 0.0f), glm::vec3(0.0f, 0, 0), glm::vec3(1, 1, 1)));
 
 	//create entities
-	//entities.push_back(new Entity(new Texture("../low_poly_grass2.png"), new VertexArray("../grass_low_poly.obj"), new Transform(glm::vec3(0, 0, -30.0f), glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1)), 24.0f, shaders.at(2)));
-
-	entities.push_back(new Entity(new Texture("../re_hall_diffuse.png"), new VertexArray("../re_hall_baked.obj"), new Transform(glm::vec3(2.0f, -2.0f, -16.0f), glm::vec3(0, 90.0f, 0), glm::vec3(1.0, 1.0, 1.0)),0.0f, shaders.at(1)));
-	//entities.push_back(new Entity(new Texture("../curuthers_diffuse.png"), new VertexArray("../curuthers.obj"), new Transform(glm::vec3(0, -2.1f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(1.0, 1.0, 1.0)),32.0f, shaders.at(2)));
-	entities.push_back(new Entity(new Texture("../garfield.png"), new VertexArray("../garfield.obj"), new Transform(glm::vec3(0, -4, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(2)));
-	entities.push_back(new Entity(new Texture("../lasagne.png"), new VertexArray("../lasagne.obj"), new Transform(glm::vec3(0, -4, -20.0f), glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1)), 16.0f, shaders.at(2)));
 	
+	entities.push_back(new Entity(new Texture("../islandhighres.png"), new Texture("../brickwall_normal.png")  , new VertexArray("../island.obj"), new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)),0.0f, shaders.at(1)));
+	
+	entities.push_back(new Entity(new Texture("../brickwall.png"), new Texture("../brickwall_normal.png"), new VertexArray("../cube.obj"), new Transform(glm::vec3(0, 3, -20.0f), glm::vec3(90, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3)));
+
+	//water
+	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../plane.obj"), new Transform(glm::vec3(0, 0, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100.0, 100.0)), 24.0f, shaders.at(1)));
+	
+	//houses and trees
+	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../tree.obj"), new Transform(glm::vec3(3.703, 1.795f, -1.672), glm::vec3(0, 336, 0), glm::vec3(0.04, 0.04, 0.04)), 24.0f, shaders.at(1)));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.689f, 1.9f, -2.633), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.342f, 1.9f, -3.5), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.912f, 1.9f, -4.408), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.955f, 1.889f, -5.481), glm::vec3(0, 76, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
+	
+	//grass ?
+	
+	
+	// gui 
+
+	GUI.push_back(std::shared_ptr <Entity>(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../plane.obj"), new Transform(glm::vec3(0, 0, -100), glm::vec3(0, 0, 0), glm::vec3(50.0, 50.0, 50.0)), 24.0f, orthoShad)));
+
+
 	// create player
-	Player* player = new Player(entities.at(1), new Transform(glm::vec3(0, -4.0f, -20.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 0.21f,10.0f);
+	player = new Player(entities.at(1), new Transform(glm::vec3(0, 0.0f, 10.0f), glm::vec3(0, 0, 0), glm::vec3(3, 3, 3)), 0.5f,0.4f,mainCamera);
 	
 	// Start the Game Loop
 	while (!quit)
@@ -91,14 +111,20 @@ Game::Game()
 				quit = true;
 			}
 		}
+		// ultimatly menu thing but atm just quits
+		const Uint8 *state = SDL_GetKeyboardState(NULL);
+		if (state[SDL_SCANCODE_ESCAPE])
+		{
+			quit = true;
+		}
+
 
 		SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+		SDL_ShowCursor(SDL_DISABLE);
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 		rendTex->clear();
-
-
-		SDL_GetWindowSize(window, &windowWidth, &windowHeight);
 		glViewport(0, 0, windowWidth, windowHeight);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -112,6 +138,9 @@ Game::Game()
 				(float)windowWidth / (float)windowHeight, 0.1f, 100.f));
 		}
 
+		orthoShad->setUniform("in_Projection",glm::ortho(0.0f, (float)windowWidth, (float)windowHeight, 0.0f, 0.0f, 1000.0f));
+		
+
 		// Call camera update 
 
 		player->Update();
@@ -119,29 +148,26 @@ Game::Game()
 
 		//GAME HERE //
 
+		gameLoop();
 
 
 
 
 
 
-
-		for (int i = 0; i < entities.size(); i++)
-		{
-			entities.at(2)->transform->setRotation(glm::vec3(entities.at(2)->transform->getRotation().x, entities.at(2)->transform->getRotation().y + 0.1, entities.at(2)->transform->getRotation().z));
-		}
-
-		//draw house
+		
+		//draw everything
 		for (int i = 0; i < entities.size(); i++)
 		{
 			entities.at(i)->draw(rendTex);
 		}
+
 		glDisable(GL_DEPTH_TEST);
 		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//postprocessing 
-
+		// make it blur 8 times at minimum
 
 		postShaders.at(0)->setUniform("in_Texture", rendTex);
 		postShaders.at(0)->draw(lightkeyRendTex);
@@ -163,7 +189,13 @@ Game::Game()
 
 		postShaders.at(3)->setViewport(glm::vec4(0, 0, windowWidth, windowHeight));
 		postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
+		//postShaders.at(3)->setUniform("in_Texture", rendTex);
 		postShaders.at(3)->draw();
+
+		glDisable(GL_CULL_FACE);
+		
+		GUI.at(0)->draw();
+
 
 
 		SDL_GL_SwapWindow(window);
@@ -172,4 +204,91 @@ Game::Game()
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
+}
+
+
+
+
+void Game::gameLoop()
+{
+
+	//6 runes 
+	//6 positions to stand 
+	//6 directions to look at
+	int runeActive = 0;
+	glm::vec3 runePositions[6];
+	runePositions[0] =glm::vec3(9.63, 3, -0.43);
+	glm::vec3 runeDirections[6];
+	runeDirections[0]=glm::vec3(0, 63, 0);
+
+	const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+	if (state[SDL_SCANCODE_KP_8])
+	{
+		//forward
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z+0.001));
+	}
+	if (state[SDL_SCANCODE_KP_4])
+	{
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x - 0.001, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z));
+	}
+	if (state[SDL_SCANCODE_KP_2])
+	{
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z - 0.001));
+	}
+	if (state[SDL_SCANCODE_KP_6])
+	{
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x + 0.001, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z));
+	}
+	if (state[SDL_SCANCODE_KP_7])
+	{
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x , entities[2]->transform->getPosition().y + 0.001, entities[2]->transform->getPosition().z));
+	}
+	if (state[SDL_SCANCODE_KP_9])
+	{
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x , entities[2]->transform->getPosition().y - 0.001, entities[2]->transform->getPosition().z));
+	}
+	if (state[SDL_SCANCODE_KP_1])
+	{
+		//rotate
+		entities[2]->transform->setRotation(glm::vec3(entities[2]->transform->getRotation().x, entities[2]->transform->getRotation().y - 1, entities[2]->transform->getRotation().z));
+	}
+	if (state[SDL_SCANCODE_KP_3])
+	{
+		entities[2]->transform->setRotation(glm::vec3(entities[2]->transform->getRotation().x, entities[2]->transform->getRotation().y + 1, entities[2]->transform->getRotation().z));
+	}
+	if (state[SDL_SCANCODE_KP_5])
+	{
+		//print pos
+		std::cout << "entpos" << std::endl;
+		std::cout << "pos : " << entities[2]->transform->getPosition().x << "," << entities[2]->transform->getPosition().y << "," << entities[2]->transform->getPosition().z << std::endl;
+		std::cout << "rot : " << entities[2]->transform->getRotation().x << "," << entities[2]->transform->getRotation().y << "," << entities[2]->transform->getRotation().z << std::endl;
+	}
+
+	if (state[SDL_SCANCODE_Q])
+	{
+		runeActive --;
+		if (runeActive < 0)
+		{
+			runeActive = 5;
+		}
+	}
+	if (state[SDL_SCANCODE_E])
+	{
+		runeActive--;
+		if (runeActive > 5)
+		{
+			runeActive = 0;
+		}
+	}
+	if (state[SDL_SCANCODE_SPACE])
+	{
+		if (glm::distance(glm::vec3(player->transform->getPosition()), runePositions[runeActive]) < 2)
+		{
+			if (glm::distance(glm::vec3(player->transform->getRotation()), runeDirections[runeActive]) < 25)
+			{
+				std::cout << "boom" << std::endl;
+			}
+		}
+	}
 }

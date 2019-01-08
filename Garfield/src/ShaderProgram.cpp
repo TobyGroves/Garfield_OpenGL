@@ -324,6 +324,46 @@ void ShaderProgram::setUniform(std::string uniform,std::shared_ptr<Texture> text
 	glUseProgram(0);
 }
 
+
+// making issues 
+
+/*void ShaderProgram::setUniform(std::string uniform, glm::vec3[] _lights)
+{
+	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		return;
+	}
+
+	for (size_t i = 0; i < samplers.size(); i++)
+	{
+		if (samplers.at(i).id == uniformId)
+		{
+			samplers.at(i).texture = texture.get();
+
+			glUseProgram(id);
+			glUniform1i(uniformId, i);
+			glUseProgram(0);
+			return;
+		}
+	}
+
+	Sampler s;
+	s.id = uniformId;
+	s.texture = texture.get();
+	samplers.push_back(s);
+
+	glUseProgram(id);
+	glUniform1i(uniformId, samplers.size() - 1);
+	glUseProgram(0);
+}*/
+
+
+
+
+
+
 GLuint ShaderProgram::getId()
 {
   return id;
