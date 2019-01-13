@@ -42,7 +42,7 @@ void main()
   //adding spec and diff
   //diff = 0.1;
 
-  vec3 lighting = diff + specular;
+  vec3 lighting = diff ;//+ specular;
   
   //drawing to fragment
   gl_FragColor = tex * vec4(lighting,1);

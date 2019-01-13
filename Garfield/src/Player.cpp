@@ -16,17 +16,7 @@ Player::Player(Entity * _PlayerEntity, Transform * _transform, float _movementSp
 	transform = _transform;
 	movementSpeed = _movementSpeed;
 	rotationSpeed = _rotationSpeed;
-	transform = new Transform(glm::vec3(0, 1, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
 	camera = _camera;
-	//camXrot = 0.0f;
-
-	camXrot = 0.0f;
-	camYrot = 0.0f;
-
-	mouseSpeed = 0.005f;
-
-	oldMouseX = 0;
-	oldMouseY = 0;
 
 
 

@@ -9,12 +9,6 @@
 #include <memory>
 #include <iostream>
 
-/*
-
-TODO MAKE TIME WITH DELTA TIME !
-
-*/
-
 float moveAmmount = 0.01f;
 int windowWidth = 1800;
 int windowHeight = 1000;
@@ -47,51 +41,21 @@ Game::Game()
 	float angle = 0;
 	// create shaders
 
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag")));
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../light.vert", "../light.frag")));
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightspecdiff.vert", "../lightspecdiff.frag")));
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightsdnorm.vert", "../lightsdnorm.frag")));
-
-	orthoShad = std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag"));
-
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../water.vert", "../water.frag")));
+	shaderSetup();
 	
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag")));
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../blur.vert", "../blur.frag")));
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../mergepass.vert", "../mergepass.frag")));
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../nullpass.vert", "../nullpass.frag")));
-
-	rendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
-	lightkeyRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
-	blurRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
-	blur2RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
-	blur3RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
-	mergeRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	postProcessingSetup();
 
 
 
 
 	//create camera
-	mainCamera = new Camera(shaders, new Transform(glm::vec3(0, 3, 0.0f), glm::vec3(0.0f, 0, 0), glm::vec3(1, 1, 1)));
+	mainCamera = new Camera(shaders, new Transform(glm::vec3(5.703, 10.0f, -5.0f), glm::vec3(0.0f, 0, 0), glm::vec3(1, 1, 1)));
 
 
 	time = std::shared_ptr<Time>(new Time());
-	//create entities
 	
-	entities.push_back(new Entity(new Texture("../islandhighres.png"), new Texture("../brickwall_normal.png")  , new VertexArray("../island.obj"), new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)),0.0f, shaders.at(2),time));
-	
-	entities.push_back(new Entity(new Texture("../brickwall.png"), new Texture("../brickwall_normal.png"), new VertexArray("../cube.obj"), new Transform(glm::vec3(0, 3, -20.0f), glm::vec3(90, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3), time));
+	entitysSetup();
 
-	//water
-	//entities.push_back(new Entity(new Texture("../water.png"), new Texture("../water.png"), new VertexArray("../WaterPlane.obj"), new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time));
-	water = std::shared_ptr<Water>(new Water(new Texture("../watertex.png"), new Texture("../watertexnormal.png"), new VertexArray("../WaterPlane.obj"), new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time, new Texture("../flowmap.png")));
-	
-	//houses and trees
-	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../tree.obj"), new Transform(glm::vec3(3.703, 1.795f, -1.672), glm::vec3(0, 336, 0), glm::vec3(0.04, 0.04, 0.04)), 24.0f, shaders.at(2), time));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.689f, 1.9f, -2.633), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.342f, 1.9f, -3.5), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.912f, 1.9f, -4.408), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.955f, 1.889f, -5.481), glm::vec3(0, 76, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
 	
 	//grass ?
 	
@@ -99,12 +63,13 @@ Game::Game()
 	
 	// gui 
 
-	GUI.push_back(std::shared_ptr <GUIEntity>(new GUIEntity(new Texture("../tree.png"), new VertexArray("../cube.obj"), new Transform(glm::vec3(0, 0, 10), glm::vec3(0, 0, 0), glm::vec3(100, 100, 100)), orthoShad)));
+	GUI.push_back(std::shared_ptr <GUIEntity>(new GUIEntity(new Texture("../tree.png"), new VertexArray("../plane.obj"), 
+		new Transform(glm::vec3(1800/2, 1000/2, 0), glm::vec3(0, 0, 0), glm::vec3(1800, 1000, 1)), orthoShad)));
 
-
-	// create player
-	player = new Player(entities.at(1), new Transform(glm::vec3(0, 0.0f, 10.0f), glm::vec3(0, 0, 0), glm::vec3(3, 3, 3)), 0.5f,0.4f,mainCamera);
 	
+	// create player
+	player = new Player(entities.at(1), new Transform(glm::vec3(25.0f, 6.0f, -3.7f), glm::vec3(0, 90, 0), glm::vec3(3, 3, 3)), 0.3f,0.2f,mainCamera);
+
 	
 	//create time
 
@@ -146,71 +111,27 @@ Game::Game()
 		for (int i = 0; i < shaders.size(); i++)
 		{
 			shaders.at(i)->setUniform("in_Projection", glm::perspective(glm::radians(45.0f),
-				(float)windowWidth / (float)windowHeight, 0.1f, 100.f));
+				(float)windowWidth / (float)windowHeight, 0.1f, 1000.f));
 		}
 
 		// Call camera update 
-
 		player->Update();
 		mainCamera->update();
 
 		//GAME HERE //
 
 		gameLoop();
-
-
-
-
-
-
-		
 		//draw everything
-		for (int i = 0; i < entities.size(); i++)
-		{
-			entities.at(i)->draw(rendTex);
-		}
-		water->draw(rendTex);
-		glDisable(GL_DEPTH_TEST);
-		for (int i = 0; i < GUI.size(); i++)
-		{
-			GUI.at(i)->draw(rendTex);
-		}
+		drawEverythingRendTex();
 
 		glDisable(GL_DEPTH_TEST);
 		glClearColor(135.0f, 206.0f, 235.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//postprocessing 
-		// make it blur 8 times at minimum
-
-		postShaders.at(0)->setUniform("in_Texture", rendTex);
-		postShaders.at(0)->draw(lightkeyRendTex);
-
-		postShaders.at(1)->setUniform("in_Texture", lightkeyRendTex);
-		postShaders.at(1)->draw(blurRendTex);
-
-		postShaders.at(1)->setUniform("in_Texture", blurRendTex);
-		postShaders.at(1)->draw(blur2RendTex);
-
-		postShaders.at(1)->setUniform("in_Texture", blur2RendTex);
-		postShaders.at(1)->draw(blur3RendTex);
-
-		postShaders.at(2)->setUniform("in_TextureA", rendTex);
-		postShaders.at(2)->setUniform("in_TextureB", blur3RendTex);
-		postShaders.at(2)->draw(mergeRendTex);
-
-		//draw to screen
-
-		postShaders.at(3)->setViewport(glm::vec4(0, 0, windowWidth, windowHeight));
-		//postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
-		postShaders.at(3)->setUniform("in_Texture", rendTex);
-		postShaders.at(3)->draw();
-
-
+		drawWithPostPro();
+		
 
 		SDL_GL_SwapWindow(window);
-
-		std::cout << "time :" << (float)time->time << std::endl;
 
 		time->timeUpdate();
 
@@ -306,4 +227,119 @@ void Game::gameLoop()
 			}
 		}
 	}
+}
+
+void Game::shaderSetup()
+{
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../light.vert", "../light.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightspecdiff.vert", "../lightspecdiff.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightsdnorm.vert", "../lightsdnorm.frag")));
+
+	orthoShad = std::shared_ptr <ShaderProgram>(new ShaderProgram("../matrix.vert", "../simple.frag"));
+
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../water.vert", "../water.frag")));
+	//shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../water.vert", "../lightspecdiff.frag")));
+}
+
+void Game::postProcessingSetup()
+{
+
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../blur.vert", "../blur.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../mergepass.vert", "../mergepass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../nullpass.vert", "../nullpass.frag")));
+
+	rendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	lightkeyRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	blurRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	blur2RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	blur3RendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+	mergeRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
+
+}
+
+void Game::entitysSetup() 
+{
+	//create entities
+
+	entities.push_back(new Entity(new Texture("../islandhighres.png"), new Texture("../brickwall_normal.png"), new VertexArray("../island.obj"),
+		new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)), 0.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../brickwall.png"), new Texture("../brickwall_normal.png"), new VertexArray("../cube.obj"),
+		new Transform(glm::vec3(5.703, 10.0f, -5.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3), time));
+
+	//water
+	/*entities.push_back(new Entity(new Texture("../water.png"), new Texture("../water.png"), new VertexArray("../WaterPlane.obj"),
+	new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time));*/
+
+	water = std::shared_ptr<Water>(new Water(new Texture("../watertex.png"), new Texture("../watertexnormal.png"), new VertexArray("../WaterPlane.obj"),
+		new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time, new Texture("../flowmap.png")));
+
+	//houses and trees
+	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../tree.obj"),
+		new Transform(glm::vec3(3.703, 1.795f, -1.672), glm::vec3(0, 336, 0), glm::vec3(0.04, 0.04, 0.04)), 24.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+		new Transform(glm::vec3(3.689f, 1.9f, -2.633), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+		new Transform(glm::vec3(3.342f, 1.9f, -3.5), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+		new Transform(glm::vec3(2.912f, 1.9f, -4.408), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+		new Transform(glm::vec3(2.955f, 1.889f, -5.481), glm::vec3(0, 76, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+}
+
+void Game::drawEverythingRendTex()
+{
+	for (int i = 0; i < entities.size(); i++)
+	{
+		entities.at(i)->draw(rendTex);
+	}
+	water->draw(rendTex);
+	glDisable(GL_DEPTH_TEST);
+	for (int i = 0; i < GUI.size(); i++)
+	{
+		GUI.at(i)->draw(rendTex);
+	}
+}
+
+void Game::drawWithPostPro()
+{
+	// postprocessing 
+
+
+
+		// TODO make a post processing function
+		// make it blur 8 times at minimum
+
+	postShaders.at(0)->setUniform("in_Texture", rendTex);
+	postShaders.at(0)->draw(lightkeyRendTex);
+
+	// bluring
+	postShaders.at(1)->setUniform("in_Texture", lightkeyRendTex);
+	postShaders.at(1)->draw(blurRendTex);
+
+	postShaders.at(1)->setUniform("in_Texture", blurRendTex);
+	postShaders.at(1)->draw(blur2RendTex);
+
+	postShaders.at(1)->setUniform("in_Texture", blur2RendTex);
+	postShaders.at(1)->draw(blur3RendTex);
+
+	// finished bluring
+
+	postShaders.at(2)->setUniform("in_TextureA", rendTex);
+	postShaders.at(2)->setUniform("in_TextureB", blur3RendTex);
+	postShaders.at(2)->draw(mergeRendTex);
+
+	//draw to screen
+
+	postShaders.at(3)->setViewport(glm::vec4(0, 0, windowWidth, windowHeight));
+	postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
+
+	//postShaders.at(3)->setUniform("in_Texture", rendTex);
+	postShaders.at(3)->draw();
 }

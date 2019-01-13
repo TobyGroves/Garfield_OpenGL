@@ -11,7 +11,7 @@ class RenderTexture;
 class GUIEntity
 {
 public:
-	GUIEntity::GUIEntity(Texture *_texture, VertexArray *_mesh, Transform * _transform, std::shared_ptr<ShaderProgram>_shader);
+	GUIEntity(Texture *_texture, VertexArray *_mesh, Transform * _transform, std::shared_ptr<ShaderProgram>_shader);
 
 	Transform* transform;
 

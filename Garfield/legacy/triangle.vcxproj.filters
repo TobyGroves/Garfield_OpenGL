@@ -160,5 +160,8 @@
     <None Include="..\water.vert">
       <Filter>shader%27s</Filter>
     </None>
+    <None Include="..\matrix.vert">
+      <Filter>shader%27s</Filter>
+    </None>
   </ItemGroup>
 </Project>

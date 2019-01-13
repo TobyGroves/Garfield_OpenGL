@@ -35,7 +35,7 @@ void Entity::draw(RenderTexture *rendTex)
 	shader->setUniform("in_Emissive", glm::vec3(0, 0, 0));
 	shader->setUniform("in_Ambient", glm::vec3(0.7, 0.7, 0.7));
 	shader->setUniform("in_LightPos", glm::vec3(0, 5.0f, 0.0f));
-	shader->setUniform("in_LightColor", glm::vec3(0.8, 0.8, 0.8));
+	shader->setUniform("in_LightColor", glm::vec3(0.6, 0.6, 0.6));
 	shader->setUniform("in_shine", shine);
 
 	shader->draw(rendTex, mesh);
@@ -57,7 +57,7 @@ void Entity::draw(std::shared_ptr<RenderTexture> rendTex)
 	shader->setUniform("in_Emissive", glm::vec3(0, 0, 0));
 	shader->setUniform("in_Ambient", glm::vec3(0.7, 0.7, 0.7));
 	shader->setUniform("in_LightPos", glm::vec3(0, 5.0f, 0.0f));
-	shader->setUniform("in_LightColor", glm::vec3(0.8, 0.8, 0.8));
+	shader->setUniform("in_LightColor", glm::vec3(0.6, 0.6, 0.6));
 	shader->setUniform("in_shine", shine);
 
 	shader->draw(rendTex.get(), mesh);
@@ -79,7 +79,7 @@ void Entity::draw()
 	shader->setUniform("in_Emissive", glm::vec3(0, 0, 0));
 	shader->setUniform("in_Ambient", glm::vec3(0.7, 0.7, 0.7));
 	shader->setUniform("in_LightPos", glm::vec3(0, 5.0f, 0.0f));
-	shader->setUniform("in_LightColor", glm::vec3(0.8, 0.8, 0.8));
+	shader->setUniform("in_LightColor", glm::vec3(0.6, 0.6, 0.6));
 	shader->setUniform("in_shine", shine);
 
 	shader->draw(mesh);

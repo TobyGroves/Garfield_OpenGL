@@ -21,8 +21,12 @@ public:
 	Player* player = nullptr;
 	Camera* mainCamera = nullptr;
 
-	Game();
 
+
+
+
+
+	Game();
 	std::vector<std::shared_ptr<ShaderProgram>> shaders;
 	std::vector<std::shared_ptr<ShaderProgram>> postShaders;
 	std::vector<Entity *> entities;
@@ -41,5 +45,15 @@ public:
 	std::shared_ptr<Time> time;
 
 	void gameLoop();
+
+private:
+
+	void shaderSetup();
+	void postProcessingSetup();
+	void entitysSetup();
+
+	void drawEverythingRendTex();
+
+	void drawWithPostPro();
 
 };

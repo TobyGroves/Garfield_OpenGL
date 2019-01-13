@@ -116,7 +116,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
   simpleShape->setBuffer("in_TexCoord", texCoords);
 }
 
-/*void ShaderProgram::draw(VertexArray *vertexArray)
+void ShaderProgram::draw(VertexArray *vertexArray)
 {
   glUseProgram(id);
   glBindVertexArray(vertexArray->getId());
@@ -139,13 +139,14 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 
   for(size_t i = 0; i < samplers.size(); i++)
   {
+
     glActiveTexture(GL_TEXTURE0 + i);
     glBindTexture(GL_TEXTURE_2D, 0);
   }
 
   glBindVertexArray(0);
   glUseProgram(0);
-}*/
+}
 
 void ShaderProgram::draw(RenderTexture *renderTexture, VertexArray *vertexArray)
 {
@@ -156,6 +157,7 @@ void ShaderProgram::draw(RenderTexture *renderTexture, VertexArray *vertexArray)
 	viewport = lastViewport;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
 void ShaderProgram::draw(std::shared_ptr<RenderTexture>renderTexture, VertexArray *vertexArray)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->getFbId());
@@ -179,38 +181,6 @@ void ShaderProgram::draw(std::shared_ptr<RenderTexture> renderTexture)
 void ShaderProgram::draw()
 {
 	draw(simpleShape);
-}
-
-void ShaderProgram::draw(VertexArray *vertexArray)
-{
-	glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
-	glUseProgram(id);
-	glBindVertexArray(vertexArray->getId());
-
-	for (size_t i = 0; i < samplers.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-
-		if (samplers.at(i).texture)
-		{
-			glBindTexture(GL_TEXTURE_2D, samplers.at(i).texture->getId());
-		}
-		else
-		{
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-	}
-
-	glDrawArrays(GL_TRIANGLES, 0, vertexArray->getVertexCount());
-
-	for (size_t i = 0; i < samplers.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-	glBindVertexArray(0);
-	glUseProgram(0);
 }
 
 void ShaderProgram::setUniform(std::string uniform, glm::vec3 value)
