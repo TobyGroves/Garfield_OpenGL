@@ -29,6 +29,7 @@ public:
   void draw(VertexArray *vertexArray);
   void draw(std::shared_ptr<RenderTexture> renderTexture);
   void draw(RenderTexture *renderTexture, VertexArray *vertexArray);
+  void draw(std::shared_ptr<RenderTexture>renderTexture, VertexArray *vertexArray);
   void setUniform(std::string uniform, glm::vec3 value);
   void setUniform(std::string uniform, glm::vec4 value);
   void setUniform(std::string uniform, float value);

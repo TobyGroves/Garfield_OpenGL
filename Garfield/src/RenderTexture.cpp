@@ -26,7 +26,7 @@ GLuint RenderTexture::getFbId()
 void RenderTexture::clear()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(135.0f, 206.0f, 235.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

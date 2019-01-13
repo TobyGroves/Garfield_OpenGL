@@ -1,5 +1,6 @@
 #include"Game.h"
 #include "transform.h"
+#include "Time.h"
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <glm/ext.hpp>
@@ -27,7 +28,7 @@ Game::Game()
 		throw std::exception();
 	}
 
-	SDL_Window *window = SDL_CreateWindow("Game Engine Garfield Demo",
+	SDL_Window *window = SDL_CreateWindow("Garfield Game Engine",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		windowWidth, windowHeight,
 		SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -53,6 +54,7 @@ Game::Game()
 
 	orthoShad = std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag"));
 
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../water.vert", "../water.frag")));
 	
 	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag")));
 	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../blur.vert", "../blur.frag")));
@@ -72,33 +74,42 @@ Game::Game()
 	//create camera
 	mainCamera = new Camera(shaders, new Transform(glm::vec3(0, 3, 0.0f), glm::vec3(0.0f, 0, 0), glm::vec3(1, 1, 1)));
 
+
+	time = std::shared_ptr<Time>(new Time());
 	//create entities
 	
-	entities.push_back(new Entity(new Texture("../islandhighres.png"), new Texture("../brickwall_normal.png")  , new VertexArray("../island.obj"), new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)),0.0f, shaders.at(1)));
+	entities.push_back(new Entity(new Texture("../islandhighres.png"), new Texture("../brickwall_normal.png")  , new VertexArray("../island.obj"), new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)),0.0f, shaders.at(2),time));
 	
-	entities.push_back(new Entity(new Texture("../brickwall.png"), new Texture("../brickwall_normal.png"), new VertexArray("../cube.obj"), new Transform(glm::vec3(0, 3, -20.0f), glm::vec3(90, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3)));
+	entities.push_back(new Entity(new Texture("../brickwall.png"), new Texture("../brickwall_normal.png"), new VertexArray("../cube.obj"), new Transform(glm::vec3(0, 3, -20.0f), glm::vec3(90, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3), time));
 
 	//water
-	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../plane.obj"), new Transform(glm::vec3(0, 0, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100.0, 100.0)), 24.0f, shaders.at(1)));
+	//entities.push_back(new Entity(new Texture("../water.png"), new Texture("../water.png"), new VertexArray("../WaterPlane.obj"), new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time));
+	water = std::shared_ptr<Water>(new Water(new Texture("../watertex.png"), new Texture("../watertexnormal.png"), new VertexArray("../WaterPlane.obj"), new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time, new Texture("../flowmap.png")));
 	
 	//houses and trees
-	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../tree.obj"), new Transform(glm::vec3(3.703, 1.795f, -1.672), glm::vec3(0, 336, 0), glm::vec3(0.04, 0.04, 0.04)), 24.0f, shaders.at(1)));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.689f, 1.9f, -2.633), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.342f, 1.9f, -3.5), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.912f, 1.9f, -4.408), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.955f, 1.889f, -5.481), glm::vec3(0, 76, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(1)));
+	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../tree.obj"), new Transform(glm::vec3(3.703, 1.795f, -1.672), glm::vec3(0, 336, 0), glm::vec3(0.04, 0.04, 0.04)), 24.0f, shaders.at(2), time));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.689f, 1.9f, -2.633), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(3.342f, 1.9f, -3.5), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.912f, 1.9f, -4.408), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
+	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"), new Transform(glm::vec3(2.955f, 1.889f, -5.481), glm::vec3(0, 76, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
 	
 	//grass ?
 	
+	//blows in the wind maybe 
 	
 	// gui 
 
-	GUI.push_back(std::shared_ptr <Entity>(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../plane.obj"), new Transform(glm::vec3(0, 0, -100), glm::vec3(0, 0, 0), glm::vec3(50.0, 50.0, 50.0)), 24.0f, orthoShad)));
+	GUI.push_back(std::shared_ptr <GUIEntity>(new GUIEntity(new Texture("../tree.png"), new VertexArray("../cube.obj"), new Transform(glm::vec3(0, 0, 10), glm::vec3(0, 0, 0), glm::vec3(100, 100, 100)), orthoShad)));
 
 
 	// create player
 	player = new Player(entities.at(1), new Transform(glm::vec3(0, 0.0f, 10.0f), glm::vec3(0, 0, 0), glm::vec3(3, 3, 3)), 0.5f,0.4f,mainCamera);
 	
+	
+	//create time
+
+	time->gameStart();
+
 	// Start the Game Loop
 	while (!quit)
 	{
@@ -126,7 +137,7 @@ Game::Game()
 		glEnable(GL_DEPTH_TEST);
 		rendTex->clear();
 		glViewport(0, 0, windowWidth, windowHeight);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(135.0f, 206.0f, 235.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		/*
@@ -137,9 +148,6 @@ Game::Game()
 			shaders.at(i)->setUniform("in_Projection", glm::perspective(glm::radians(45.0f),
 				(float)windowWidth / (float)windowHeight, 0.1f, 100.f));
 		}
-
-		orthoShad->setUniform("in_Projection",glm::ortho(0.0f, (float)windowWidth, (float)windowHeight, 0.0f, 0.0f, 1000.0f));
-		
 
 		// Call camera update 
 
@@ -161,9 +169,15 @@ Game::Game()
 		{
 			entities.at(i)->draw(rendTex);
 		}
+		water->draw(rendTex);
+		glDisable(GL_DEPTH_TEST);
+		for (int i = 0; i < GUI.size(); i++)
+		{
+			GUI.at(i)->draw(rendTex);
+		}
 
 		glDisable(GL_DEPTH_TEST);
-		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		glClearColor(135.0f, 206.0f, 235.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//postprocessing 
@@ -188,17 +202,18 @@ Game::Game()
 		//draw to screen
 
 		postShaders.at(3)->setViewport(glm::vec4(0, 0, windowWidth, windowHeight));
-		postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
-		//postShaders.at(3)->setUniform("in_Texture", rendTex);
+		//postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
+		postShaders.at(3)->setUniform("in_Texture", rendTex);
 		postShaders.at(3)->draw();
-
-		glDisable(GL_CULL_FACE);
-		
-		GUI.at(0)->draw();
 
 
 
 		SDL_GL_SwapWindow(window);
+
+		std::cout << "time :" << (float)time->time << std::endl;
+
+		time->timeUpdate();
+
 	}
 
 	SDL_DestroyWindow(window);

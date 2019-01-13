@@ -156,6 +156,15 @@ void ShaderProgram::draw(RenderTexture *renderTexture, VertexArray *vertexArray)
 	viewport = lastViewport;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+void ShaderProgram::draw(std::shared_ptr<RenderTexture>renderTexture, VertexArray *vertexArray)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->getFbId());
+	glm::vec4 lastViewport = viewport;
+	viewport = glm::vec4(0, 0, renderTexture->getSize().x, renderTexture->getSize().y);
+	draw(vertexArray);
+	viewport = lastViewport;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
 void ShaderProgram::draw(RenderTexture *renderTexture)
 {

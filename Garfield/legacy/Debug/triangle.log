@@ -1,6 +1,7 @@
 ﻿  Game.cpp
-e:\uni\garfield_opengl\garfield\src\game.cpp(131): warning C4018: '<': signed/unsigned mismatch
-e:\uni\garfield_opengl\garfield\src\game.cpp(156): warning C4018: '<': signed/unsigned mismatch
+e:\uni\garfield_opengl\garfield\src\game.cpp(146): warning C4018: '<': signed/unsigned mismatch
+e:\uni\garfield_opengl\garfield\src\game.cpp(168): warning C4018: '<': signed/unsigned mismatch
+e:\uni\garfield_opengl\garfield\src\game.cpp(174): warning C4018: '<': signed/unsigned mismatch
   triangle.vcxproj -> E:\Uni\Garfield_OpenGL\Garfield\legacy\Debug\triangle.exe
   triangle.vcxproj -> E:\Uni\Garfield_OpenGL\Garfield\legacy\Debug\triangle.pdb (Partial PDB)
   ..\contrib\msvc-windows-x86\SDL2\bin\SDL2.dll

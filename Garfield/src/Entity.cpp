@@ -6,7 +6,7 @@
 #include "ShaderProgram.h"
 #include <memory>
 
-Entity::Entity(Texture *_texture, Texture *_normalMap ,VertexArray *_mesh, Transform * _transform, float _shine, std::shared_ptr<ShaderProgram>_shader)
+Entity::Entity(Texture *_texture, Texture *_normalMap ,VertexArray *_mesh, Transform * _transform, float _shine, std::shared_ptr<ShaderProgram>_shader, std::shared_ptr<Time> _time)
 {
 	texture = _texture;
 	normalMap = _normalMap;
@@ -14,6 +14,7 @@ Entity::Entity(Texture *_texture, Texture *_normalMap ,VertexArray *_mesh, Trans
 	transform = _transform;
 	shader = _shader;
 	shine = _shine;
+	time = _time;
 
 }
 
@@ -27,13 +28,14 @@ void Entity::draw(RenderTexture *rendTex)
 	model = glm::rotate(model, glm::radians(transform->getRotation().z), glm::vec3(0, 0, 1));
 	model = glm::scale(model, transform->getScale());
 
+	shader->setUniform("in_Time", time->time);
 	shader->setUniform("in_Model", model);
 	shader->setUniform("in_Texture", texture);
 	shader->setUniform("in_NormalMap", normalMap);
 	shader->setUniform("in_Emissive", glm::vec3(0, 0, 0));
-	shader->setUniform("in_Ambient", glm::vec3(0.1, 0.1, 0.1));
-	shader->setUniform("in_LightPos", glm::vec3(0, 2.0f, -20.0f));
-	shader->setUniform("in_LightColor", glm::vec3(0.1, 0.1, 0.1));
+	shader->setUniform("in_Ambient", glm::vec3(0.7, 0.7, 0.7));
+	shader->setUniform("in_LightPos", glm::vec3(0, 5.0f, 0.0f));
+	shader->setUniform("in_LightColor", glm::vec3(0.8, 0.8, 0.8));
 	shader->setUniform("in_shine", shine);
 
 	shader->draw(rendTex, mesh);
@@ -48,13 +50,14 @@ void Entity::draw(std::shared_ptr<RenderTexture> rendTex)
 	model = glm::rotate(model, glm::radians(transform->getRotation().z), glm::vec3(0, 0, 1));
 	model = glm::scale(model, transform->getScale());
 
+	shader->setUniform("in_Time", ((float)time->time));
 	shader->setUniform("in_Model", model);
 	shader->setUniform("in_Texture", texture);
 	shader->setUniform("in_NormalMap", normalMap);
 	shader->setUniform("in_Emissive", glm::vec3(0, 0, 0));
-	shader->setUniform("in_Ambient", glm::vec3(0.1, 0.1, 0.1));
-	shader->setUniform("in_LightPos", glm::vec3(0, 2.0f, -20.0f));
-	shader->setUniform("in_LightColor", glm::vec3(0.1, 0.1, 0.1));
+	shader->setUniform("in_Ambient", glm::vec3(0.7, 0.7, 0.7));
+	shader->setUniform("in_LightPos", glm::vec3(0, 5.0f, 0.0f));
+	shader->setUniform("in_LightColor", glm::vec3(0.8, 0.8, 0.8));
 	shader->setUniform("in_shine", shine);
 
 	shader->draw(rendTex.get(), mesh);
@@ -69,13 +72,14 @@ void Entity::draw()
 	model = glm::rotate(model, glm::radians(transform->getRotation().z), glm::vec3(0, 0, 1));
 	model = glm::scale(model, transform->getScale());
 
+	shader->setUniform("in_Time", time->time);
 	shader->setUniform("in_Model", model);
 	shader->setUniform("in_Texture", texture);
 	shader->setUniform("in_NormalMap", normalMap);
 	shader->setUniform("in_Emissive", glm::vec3(0, 0, 0));
-	shader->setUniform("in_Ambient", glm::vec3(0.4, 0.4, 0.6));
-	shader->setUniform("in_LightPos", glm::vec3(0, 2.0f, -20.0f));
-	shader->setUniform("in_LightColor", glm::vec3(0.3, 0.3, 0.3));
+	shader->setUniform("in_Ambient", glm::vec3(0.7, 0.7, 0.7));
+	shader->setUniform("in_LightPos", glm::vec3(0, 5.0f, 0.0f));
+	shader->setUniform("in_LightColor", glm::vec3(0.8, 0.8, 0.8));
 	shader->setUniform("in_shine", shine);
 
 	shader->draw(mesh);

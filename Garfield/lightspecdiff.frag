@@ -24,8 +24,6 @@ void main()
   
   //lighting 
   //diffuse
-  //vec3 lightDir = normalize(ex_FragPos - (inverse(in_View) * vec4(in_LightPos,1)));
-  //vec3 lightDir = normalize(ex_FragPos - in_LightPos);
   vec3 lightDir = normalize(in_LightPos - ex_FragPos);
   float diff = max(dot(norm, lightDir),0.0);
   
@@ -38,8 +36,10 @@ void main()
   vec3 specular = (in_LightColor * specu) * vec3 (1,1,1);
   
   //adding spec and diff
-  vec3 lighting = diff + specular + in_Ambient;
+  vec3 lighting = diff +  in_Ambient ; //specular+
   
   //drawing to fragment
   gl_FragColor = tex * vec4(lighting,1);
+
+   gl_FragColor = tex * vec4(lighting,1);
 }
