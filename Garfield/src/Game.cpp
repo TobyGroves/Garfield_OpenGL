@@ -17,6 +17,10 @@ float Ymov = 0;
 
 Game::Game()
 {
+	rune0Found = false;
+	rune1Found = false;
+	runeActive = 0;
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw std::exception();
@@ -63,12 +67,13 @@ Game::Game()
 	
 	// gui 
 
-	GUI.push_back(std::shared_ptr <GUIEntity>(new GUIEntity(new Texture("../tree.png"), new VertexArray("../plane.obj"), 
+	GUI.push_back(std::shared_ptr <GUIEntity>(new GUIEntity(new Texture("../assets/pattern1.png"), new VertexArray("../assets/plane.obj"), 
 		new Transform(glm::vec3(1800/2, 1000/2, 0), glm::vec3(0, 0, 0), glm::vec3(1800, 1000, 1)), orthoShad)));
-
+	GUI.push_back(std::shared_ptr <GUIEntity>(new GUIEntity(new Texture("../assets/pattern2.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(1800 / 2, 1000 / 2, 0), glm::vec3(0, 0, 0), glm::vec3(1800, 1000, 1)), orthoShad)));
 	
 	// create player
-	player = new Player(entities.at(1), new Transform(glm::vec3(25.0f, 6.0f, -3.7f), glm::vec3(0, 90, 0), glm::vec3(3, 3, 3)), 0.3f,0.2f,mainCamera);
+	player = new Player(entities.at(1), new Transform(glm::vec3(25.0f, 6.0f, -3.7f), glm::vec3(0, 90, 0), glm::vec3(3, 3, 3)), 0.1f,0.07f,mainCamera);
 
 	
 	//create time
@@ -124,7 +129,6 @@ Game::Game()
 		//draw everything
 		drawEverythingRendTex();
 
-		glDisable(GL_DEPTH_TEST);
 		glClearColor(135.0f, 206.0f, 235.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -151,38 +155,38 @@ void Game::gameLoop()
 	//6 runes 
 	//6 positions to stand 
 	//6 directions to look at
-	int runeActive = 0;
-	glm::vec3 runePositions[6];
-	runePositions[0] =glm::vec3(9.63, 3, -0.43);
-	glm::vec3 runeDirections[6];
-	runeDirections[0]=glm::vec3(0, 63, 0);
-
+	glm::vec3 runePositions[2];
+	runePositions[0] =glm::vec3(10.24, 3, 0.5207);
+	runePositions[1] = glm::vec3(6.38437, 2.299, 12.7987);
+	glm::vec3 runeDirections[2];
+	runeDirections[0]=glm::vec3(0, 65.4, 0);
+	runeDirections[1] = glm::vec3(0, 56.6004, 0);
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-	if (state[SDL_SCANCODE_KP_8])
+	/*if (state[SDL_SCANCODE_KP_8])
 	{
 		//forward
-		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z+0.001));
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z+0.1));
 	}
 	if (state[SDL_SCANCODE_KP_4])
 	{
-		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x - 0.001, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z));
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x - 0.1, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z));
 	}
 	if (state[SDL_SCANCODE_KP_2])
 	{
-		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z - 0.001));
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z - 0.1));
 	}
 	if (state[SDL_SCANCODE_KP_6])
 	{
-		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x + 0.001, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z));
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x + 0.1, entities[2]->transform->getPosition().y, entities[2]->transform->getPosition().z));
 	}
 	if (state[SDL_SCANCODE_KP_7])
 	{
-		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x , entities[2]->transform->getPosition().y + 0.001, entities[2]->transform->getPosition().z));
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x , entities[2]->transform->getPosition().y + 0.1, entities[2]->transform->getPosition().z));
 	}
 	if (state[SDL_SCANCODE_KP_9])
 	{
-		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x , entities[2]->transform->getPosition().y - 0.001, entities[2]->transform->getPosition().z));
+		entities[2]->transform->setPosition(glm::vec3(entities[2]->transform->getPosition().x , entities[2]->transform->getPosition().y - 0.1, entities[2]->transform->getPosition().z));
 	}
 	if (state[SDL_SCANCODE_KP_1])
 	{
@@ -192,38 +196,39 @@ void Game::gameLoop()
 	if (state[SDL_SCANCODE_KP_3])
 	{
 		entities[2]->transform->setRotation(glm::vec3(entities[2]->transform->getRotation().x, entities[2]->transform->getRotation().y + 1, entities[2]->transform->getRotation().z));
-	}
-	if (state[SDL_SCANCODE_KP_5])
+	}*/
+	/*if (state[SDL_SCANCODE_KP_5])
 	{
 		//print pos
 		std::cout << "entpos" << std::endl;
 		std::cout << "pos : " << entities[2]->transform->getPosition().x << "," << entities[2]->transform->getPosition().y << "," << entities[2]->transform->getPosition().z << std::endl;
 		std::cout << "rot : " << entities[2]->transform->getRotation().x << "," << entities[2]->transform->getRotation().y << "," << entities[2]->transform->getRotation().z << std::endl;
-	}
+	}*/
 
 	if (state[SDL_SCANCODE_Q])
 	{
-		runeActive --;
-		if (runeActive < 0)
-		{
-			runeActive = 5;
-		}
+		runeActive = 1;
 	}
 	if (state[SDL_SCANCODE_E])
 	{
-		runeActive--;
-		if (runeActive > 5)
-		{
-			runeActive = 0;
-		}
+		runeActive = 0;
 	}
 	if (state[SDL_SCANCODE_SPACE])
 	{
-		if (glm::distance(glm::vec3(player->transform->getPosition()), runePositions[runeActive]) < 2)
+		if (glm::distance(glm::vec3(player->transform->getPosition()), runePositions[runeActive]) < 3)
 		{
-			if (glm::distance(glm::vec3(player->transform->getRotation()), runeDirections[runeActive]) < 25)
+			if (glm::distance(glm::vec3(player->transform->getRotation()), runeDirections[runeActive]) < 15)
 			{
-				std::cout << "boom" << std::endl;
+				if (runeActive == 1 && !rune1Found)
+				{
+					std::cout << "Yeah you've got time! You found Mr incredible Congratz!" << std::endl;
+					rune1Found = true;
+				}
+				if (runeActive == 0 && !rune0Found)
+				{
+					std::cout << "Well Done! You found the spikey houses!" << std::endl;
+					rune0Found = true;
+				}
 			}
 		}
 	}
@@ -231,24 +236,24 @@ void Game::gameLoop()
 
 void Game::shaderSetup()
 {
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../simple.vert", "../simple.frag")));
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../light.vert", "../light.frag")));
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightspecdiff.vert", "../lightspecdiff.frag")));
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightsdnorm.vert", "../lightsdnorm.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/simple.vert", "../shaders/simple.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/light.vert", "../shaders/light.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/lightspecdiff.vert", "../shaders/lightspecdiff.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/lightsdnorm.vert", "../shaders/lightsdnorm.frag")));
 
-	orthoShad = std::shared_ptr <ShaderProgram>(new ShaderProgram("../matrix.vert", "../simple.frag"));
+	orthoShad = std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/matrix.vert", "../shaders/simple.frag"));
 
-	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../water.vert", "../water.frag")));
+	shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/water.vert", "../shaders/water.frag")));
 	//shaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../water.vert", "../lightspecdiff.frag")));
 }
 
 void Game::postProcessingSetup()
 {
 
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../lightkeypass.vert", "../lightkeypass.frag")));
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../blur.vert", "../blur.frag")));
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../mergepass.vert", "../mergepass.frag")));
-	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../nullpass.vert", "../nullpass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/lightkeypass.vert", "../shaders/lightkeypass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/blur.vert", "../shaders/blur.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/mergepass.vert", "../shaders/mergepass.frag")));
+	postShaders.push_back(std::shared_ptr <ShaderProgram>(new ShaderProgram("../shaders/nullpass.vert", "../shaders/nullpass.frag")));
 
 	rendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
 	lightkeyRendTex = std::shared_ptr<RenderTexture>(new RenderTexture(1800, 1000));
@@ -263,33 +268,68 @@ void Game::entitysSetup()
 {
 	//create entities
 
-	entities.push_back(new Entity(new Texture("../islandhighres.png"), new Texture("../brickwall_normal.png"), new VertexArray("../island.obj"),
+	entities.push_back(new Entity(new Texture("../assets/islandhighres.png"), new Texture("../assets/brickwall_normal.png"), new VertexArray("../assets/island.obj"),
 		new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)), 0.0f, shaders.at(2), time));
 
-	entities.push_back(new Entity(new Texture("../brickwall.png"), new Texture("../brickwall_normal.png"), new VertexArray("../cube.obj"),
+	entities.push_back(new Entity(new Texture("../assets/brickwall.png"), new Texture("../assets/brickwall_normal.png"), new VertexArray("../assets/cube.obj"),
 		new Transform(glm::vec3(5.703, 10.0f, -5.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3), time));
+
+	entities.push_back(new Entity(new Texture("../skybox/miramar_rt.png"), new Texture("../skybox/miramar_rt.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(-100, 20, 0), glm::vec3(0, 90, 0), glm::vec3(200, 200, 200)), 12.0f, shaders.at(0), time));
+
+	entities.push_back(new Entity(new Texture("../skybox/miramar_lf.png"), new Texture("../skybox/miramar_lf.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(100, 20, 0), glm::vec3(0, 270, 0), glm::vec3(200, 200, 200)), 12.0f, shaders.at(0), time));
+
+	entities.push_back(new Entity(new Texture("../skybox/miramar_up.png"), new Texture("../skybox/miramar_up.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(0, 120, 0), glm::vec3(90, 180, 0), glm::vec3(200, 200, 200)), 12.0f, shaders.at(0), time));
+
+	entities.push_back(new Entity(new Texture("../skybox/miramar_dn.png"), new Texture("../skybox/miramar_dn.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(0, -80, 0), glm::vec3(270, 0, 0), glm::vec3(200, 200, 200)), 12.0f, shaders.at(0), time));
+
+	entities.push_back(new Entity(new Texture("../skybox/miramar_bk.png"), new Texture("../skybox/miramar_bk.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(0, 20, 100), glm::vec3(0, 180, 0), glm::vec3(200, 200, 200)), 12.0f, shaders.at(0), time));
+
+	entities.push_back(new Entity(new Texture("../skybox/miramar_ft.png"), new Texture("../skybox/miramar_ft.png"), new VertexArray("../assets/plane.obj"),
+		new Transform(glm::vec3(0, 20, -100), glm::vec3(0, 0, 0), glm::vec3(200, 200, 200)), 12.0f, shaders.at(0), time));
+
+
+
+
 
 	//water
 	/*entities.push_back(new Entity(new Texture("../water.png"), new Texture("../water.png"), new VertexArray("../WaterPlane.obj"),
 	new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time));*/
 
-	water = std::shared_ptr<Water>(new Water(new Texture("../watertex.png"), new Texture("../watertexnormal.png"), new VertexArray("../WaterPlane.obj"),
-		new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time, new Texture("../flowmap.png")));
+	water = std::shared_ptr<Water>(new Water(new Texture("../assets/watertex.png"), new Texture("../assets/watertexnormal.png"), new VertexArray("../assets/WaterPlane.obj"),
+		new Transform(glm::vec3(0, 0.846993, 0), glm::vec3(270, 0, 0), glm::vec3(100, 100, 100)), 24.0f, shaders.at(4), time, new Texture("../assets/flowmap.png")));
 
-	//houses and trees
-	entities.push_back(new Entity(new Texture("../tree.png"), new Texture("../tree.png"), new VertexArray("../tree.obj"),
+	//houses and trees and objects
+
+	entities.push_back(new Entity(new Texture("../assets/incredible.png"), new Texture("../assets/incredible.png"), new VertexArray("../assets/incredible.obj"),
+		new Transform(glm::vec3(3.81, 1.895, 11.128), glm::vec3(0, 47, 0), glm::vec3(0.0025, 0.0025, 0.0025)), 12.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../assets/bouncyCastle.png"), new Texture("../assets/bouncyCastleNorm.png"), new VertexArray("../assets/bouncyCastle.obj"),
+		new Transform(glm::vec3(3.71, 1.795, 11.028), glm::vec3(0, 57, 0), glm::vec3(0.2, 0.2, 0.2)), 21.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../assets/cargo.png"), new Texture("../assets/cargo.png"), new VertexArray("../assets/cargo.obj"),
+		new Transform(glm::vec3(6.41, 1.695, 2.628), glm::vec3(0, -179, 0), glm::vec3(0.5, 0.5, 0.5)), 24.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../assets/clank.png"), new Texture("../assets/clank.png"), new VertexArray("../assets/clank.obj"),
+		new Transform(glm::vec3(-27.19, -2.705, -7.672), glm::vec3(0, 61, 0), glm::vec3(1, 1, 1)), 24.0f, shaders.at(2), time));
+
+	entities.push_back(new Entity(new Texture("../assets/tree.png"), new Texture("../assets/tree.png"), new VertexArray("../assets/tree.obj"),
 		new Transform(glm::vec3(3.703, 1.795f, -1.672), glm::vec3(0, 336, 0), glm::vec3(0.04, 0.04, 0.04)), 24.0f, shaders.at(2), time));
 
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+	entities.push_back(new Entity(new Texture("../assets/house.png"), new Texture("../assets/house.png"), new VertexArray("../assets/house.obj"),
 		new Transform(glm::vec3(3.689f, 1.9f, -2.633), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
 
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+	entities.push_back(new Entity(new Texture("../assets/house.png"), new Texture("../assets/house.png"), new VertexArray("../assets/house.obj"),
 		new Transform(glm::vec3(3.342f, 1.9f, -3.5), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
 
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+	entities.push_back(new Entity(new Texture("../assets/house.png"), new Texture("../assets/house.png"), new VertexArray("../assets/house.obj"),
 		new Transform(glm::vec3(2.912f, 1.9f, -4.408), glm::vec3(0, 90, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
 
-	entities.push_back(new Entity(new Texture("../house.png"), new Texture("../house.png"), new VertexArray("../house.obj"),
+	entities.push_back(new Entity(new Texture("../assets/house.png"), new Texture("../assets/house.png"), new VertexArray("../assets/house.obj"),
 		new Transform(glm::vec3(2.955f, 1.889f, -5.481), glm::vec3(0, 76, 0), glm::vec3(0.01, 0.01, 0.01)), 24.0f, shaders.at(2), time));
 }
 
@@ -301,10 +341,8 @@ void Game::drawEverythingRendTex()
 	}
 	water->draw(rendTex);
 	glDisable(GL_DEPTH_TEST);
-	for (int i = 0; i < GUI.size(); i++)
-	{
-		GUI.at(i)->draw(rendTex);
-	}
+	
+	GUI.at(runeActive)->draw(rendTex);
 }
 
 void Game::drawWithPostPro()
@@ -338,8 +376,10 @@ void Game::drawWithPostPro()
 	//draw to screen
 
 	postShaders.at(3)->setViewport(glm::vec4(0, 0, windowWidth, windowHeight));
-	postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
+	//postShaders.at(3)->setUniform("in_Texture", mergeRendTex);
 
-	//postShaders.at(3)->setUniform("in_Texture", rendTex);
+	postShaders.at(3)->setUniform("in_Texture", rendTex);
+
+	//postShaders.at(3)->setUniform("in_Texture", lightkeyRendTex);
 	postShaders.at(3)->draw();
 }

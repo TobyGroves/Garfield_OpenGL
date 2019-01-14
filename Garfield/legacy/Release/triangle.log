@@ -1,0 +1,48 @@
+﻿  stb_image.cpp
+  Camera.cpp
+w:\garfield_opengl\garfield\src\camera.cpp(28): warning C4018: '<': signed/unsigned mismatch
+  Entity.cpp
+  Game.cpp
+w:\garfield_opengl\garfield\src\game.cpp(116): warning C4018: '<': signed/unsigned mismatch
+w:\garfield_opengl\garfield\src\game.cpp(338): warning C4018: '<': signed/unsigned mismatch
+  GUIEntity.cpp
+  main.cpp
+  Player.cpp
+  RenderTexture.cpp
+  ShaderProgram.cpp
+  Texture.cpp
+w:\garfield_opengl\garfield\src\texture.cpp(7): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+w:\garfield_opengl\garfield\src\texture.cpp(8): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+w:\garfield_opengl\garfield\src\texture.cpp(31): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+w:\garfield_opengl\garfield\src\texture.cpp(32): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Time.cpp
+w:\garfield_opengl\garfield\src\time.cpp(12): warning C4244: '=': conversion from 'clock_t' to 'float', possible loss of data
+w:\garfield_opengl\garfield\src\time.cpp(20): warning C4244: '=': conversion from 'clock_t' to 'float', possible loss of data
+  Transform.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
+  Water.cpp
+  Generating code
+  All 1227 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  triangle.vcxproj -> W:\Garfield_OpenGL\Garfield\legacy\Release\triangle.exe
+  ..\contrib\msvc-windows-x86\SDL2\bin\SDL2.dll
+          1 file(s) copied.
+  ..\contrib\msvc-windows-x86\glew\bin\glew32.dll
+          1 file(s) copied.

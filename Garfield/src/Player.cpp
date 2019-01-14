@@ -104,11 +104,20 @@ void Player::Update()
 		transform->setRotation(movtemp);
 	}
 
-	if (state[SDL_SCANCODE_SPACE])
+
+	if (transform->getPosition().x > 75.0f)transform->setPosition(glm::vec3(75.0f, transform->getPosition().y, transform->getPosition().z));
+	if (transform->getPosition().x < -75.0f)transform->setPosition(glm::vec3(-75.0f, transform->getPosition().y, transform->getPosition().z));
+	if (transform->getPosition().z > 75.0f)transform->setPosition(glm::vec3(transform->getPosition().x, transform->getPosition().y, 75.0f));
+	if (transform->getPosition().z < -75.0f)transform->setPosition(glm::vec3(transform->getPosition().x, transform->getPosition().y, -75.0f));
+	if (transform->getPosition().y > 100.0f)transform->setPosition(glm::vec3(transform->getPosition().x, 100.0f, transform->getPosition().z));
+	if (transform->getPosition().y < 1.0f)transform->setPosition(glm::vec3(transform->getPosition().x, 1.0f, transform->getPosition().z));
+
+
+	/*if (state[SDL_SCANCODE_SPACE])
 	{
 		std::cout << "Position :" << PlayerEntity->transform->getPosition().x << ", " << PlayerEntity->transform->getPosition().y << ", " << PlayerEntity->transform->getPosition().z << std::endl;
 		std::cout << "Rotation :" << PlayerEntity->transform->getRotation().x << ", " << PlayerEntity->transform->getRotation().y << ", " << PlayerEntity->transform->getRotation().z << std::endl;
-	}
+	}*/
 
 
 	

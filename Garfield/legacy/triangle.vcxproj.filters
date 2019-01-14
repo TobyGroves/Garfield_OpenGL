@@ -106,61 +106,61 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\blur.frag">
+    <None Include="..\shaders\blur.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\blur.vert">
+    <None Include="..\shaders\blur.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\light.frag">
+    <None Include="..\shaders\light.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\light.vert">
+    <None Include="..\shaders\light.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\lightkeypass.frag">
+    <None Include="..\shaders\lightkeypass.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\lightkeypass.vert">
+    <None Include="..\shaders\lightkeypass.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\lightspecdiff.frag">
+    <None Include="..\shaders\lightsdnorm.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\lightspecdiff.vert">
+    <None Include="..\shaders\lightsdnorm.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\mergepass.frag">
+    <None Include="..\shaders\lightspecdiff.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\mergepass.vert">
+    <None Include="..\shaders\lightspecdiff.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\nullpass.frag">
+    <None Include="..\shaders\matrix.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\nullpass.vert">
+    <None Include="..\shaders\mergepass.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\simple.frag">
+    <None Include="..\shaders\mergepass.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\simple.vert">
+    <None Include="..\shaders\nullpass.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\lightsdnorm.frag">
+    <None Include="..\shaders\nullpass.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\lightsdnorm.vert">
+    <None Include="..\shaders\simple.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\water.frag">
+    <None Include="..\shaders\simple.vert">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\water.vert">
+    <None Include="..\shaders\water.frag">
       <Filter>shader%27s</Filter>
     </None>
-    <None Include="..\matrix.vert">
+    <None Include="..\shaders\water.vert">
       <Filter>shader%27s</Filter>
     </None>
   </ItemGroup>

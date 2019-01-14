@@ -23,7 +23,7 @@ public:
 
 
 
-
+	int runeActive;
 
 
 	Game();
@@ -47,6 +47,9 @@ public:
 	void gameLoop();
 
 private:
+
+	bool rune1Found;
+	bool rune0Found;
 
 	void shaderSetup();
 	void postProcessingSetup();

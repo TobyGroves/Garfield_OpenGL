@@ -39,19 +39,6 @@ void GUIEntity::draw(RenderTexture *rendTex)
 void GUIEntity::draw(std::shared_ptr<RenderTexture> rendTex)
 {
 
-	/*
-	glm::mat4 model(1.0f);
-
-	shader->setUniform("in_Projection", glm::ortho(0.0f, 1800.0f, 0.0f, 1000.0f, 100.0f, 100.0f));
-
-	model = glm::translate(model, transform->getPosition());
-	model = glm::scale(model, transform->getScale());
-
-	shader->setUniform("in_Model", model);
-	shader->setUniform("in_Texture", texture);
-
-	shader->draw(rendTex, mesh);*/
-
 	glm::mat4 model = glm::mat4(1.0f);
 
 	shader->setUniform("in_Projection", glm::ortho(0.0f, 1800.0f, 0.0f, 1000.0f , -100.0f, 100.0f));
