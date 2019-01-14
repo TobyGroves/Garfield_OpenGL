@@ -1,47 +1,12 @@
-﻿  stb_image.cpp
-  Camera.cpp
-w:\garfield_opengl\garfield\src\camera.cpp(28): warning C4018: '<': signed/unsigned mismatch
-  Entity.cpp
-  Game.cpp
-w:\garfield_opengl\garfield\src\game.cpp(116): warning C4018: '<': signed/unsigned mismatch
-w:\garfield_opengl\garfield\src\game.cpp(338): warning C4018: '<': signed/unsigned mismatch
-  GUIEntity.cpp
-  main.cpp
-  Player.cpp
-  RenderTexture.cpp
-  ShaderProgram.cpp
-  Texture.cpp
-w:\garfield_opengl\garfield\src\texture.cpp(7): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-w:\garfield_opengl\garfield\src\texture.cpp(8): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-w:\garfield_opengl\garfield\src\texture.cpp(31): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-w:\garfield_opengl\garfield\src\texture.cpp(32): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  Time.cpp
-w:\garfield_opengl\garfield\src\time.cpp(12): warning C4244: '=': conversion from 'clock_t' to 'float', possible loss of data
-w:\garfield_opengl\garfield\src\time.cpp(20): warning C4244: '=': conversion from 'clock_t' to 'float', possible loss of data
-  Transform.cpp
-  VertexArray.cpp
-  VertexBuffer.cpp
-  Water.cpp
+﻿  Game.cpp
+w:\garfieldone\garfield_opengl\garfield\src\game.cpp(113): warning C4018: '<': signed/unsigned mismatch
+w:\garfieldone\garfield_opengl\garfield\src\game.cpp(335): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  All 1227 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  0 of 1227 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  triangle.vcxproj -> W:\Garfield_OpenGL\Garfield\legacy\Release\triangle.exe
+  triangle.vcxproj -> W:\Garfieldone\Garfield_OpenGL\Garfield\legacy\Release\triangle.exe
   ..\contrib\msvc-windows-x86\SDL2\bin\SDL2.dll
           1 file(s) copied.
   ..\contrib\msvc-windows-x86\glew\bin\glew32.dll

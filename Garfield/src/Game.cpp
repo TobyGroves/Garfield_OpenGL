@@ -9,11 +9,8 @@
 #include <memory>
 #include <iostream>
 
-float moveAmmount = 0.01f;
 int windowWidth = 1800;
 int windowHeight = 1000;
-float Xmov = 0;
-float Ymov = 0;
 
 Game::Game()
 {
@@ -268,10 +265,10 @@ void Game::entitysSetup()
 {
 	//create entities
 
-	entities.push_back(new Entity(new Texture("../assets/islandhighres.png"), new Texture("../assets/brickwall_normal.png"), new VertexArray("../assets/island.obj"),
+	entities.push_back(new Entity(new Texture("../assets/islandhighres.png"), new Texture("../assets/islandhighres.png"), new VertexArray("../assets/island.obj"),
 		new Transform(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(270, 0, 0), glm::vec3(50.0, 50.0, 50.0)), 0.0f, shaders.at(2), time));
 
-	entities.push_back(new Entity(new Texture("../assets/brickwall.png"), new Texture("../assets/brickwall_normal.png"), new VertexArray("../assets/cube.obj"),
+	entities.push_back(new Entity(new Texture("../assets/default.png"), new Texture("../assets/default.png"), new VertexArray("../assets/cube.obj"),
 		new Transform(glm::vec3(5.703, 10.0f, -5.0f), glm::vec3(0, 0, 0), glm::vec3(4, 4, 4)), 24.0f, shaders.at(3), time));
 
 	entities.push_back(new Entity(new Texture("../skybox/miramar_rt.png"), new Texture("../skybox/miramar_rt.png"), new VertexArray("../assets/plane.obj"),
@@ -309,7 +306,7 @@ void Game::entitysSetup()
 		new Transform(glm::vec3(3.81, 1.895, 11.128), glm::vec3(0, 47, 0), glm::vec3(0.0025, 0.0025, 0.0025)), 12.0f, shaders.at(2), time));
 
 	entities.push_back(new Entity(new Texture("../assets/bouncyCastle.png"), new Texture("../assets/bouncyCastleNorm.png"), new VertexArray("../assets/bouncyCastle.obj"),
-		new Transform(glm::vec3(3.71, 1.795, 11.028), glm::vec3(0, 57, 0), glm::vec3(0.2, 0.2, 0.2)), 21.0f, shaders.at(2), time));
+		new Transform(glm::vec3(3.71, 1.795, 11.028), glm::vec3(0, 57, 0), glm::vec3(0.2, 0.2, 0.2)), 21.0f, shaders.at(3), time));
 
 	entities.push_back(new Entity(new Texture("../assets/cargo.png"), new Texture("../assets/cargo.png"), new VertexArray("../assets/cargo.obj"),
 		new Transform(glm::vec3(6.41, 1.695, 2.628), glm::vec3(0, -179, 0), glm::vec3(0.5, 0.5, 0.5)), 24.0f, shaders.at(2), time));

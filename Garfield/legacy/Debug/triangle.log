@@ -1,7 +1,7 @@
 ﻿  Game.cpp
-w:\garfield_opengl\garfield\src\game.cpp(116): warning C4018: '<': signed/unsigned mismatch
-w:\garfield_opengl\garfield\src\game.cpp(338): warning C4018: '<': signed/unsigned mismatch
-  triangle.vcxproj -> W:\Garfield_OpenGL\Garfield\legacy\Debug\triangle.exe
+w:\garfieldone\garfield_opengl\garfield\src\game.cpp(116): warning C4018: '<': signed/unsigned mismatch
+w:\garfieldone\garfield_opengl\garfield\src\game.cpp(338): warning C4018: '<': signed/unsigned mismatch
+  triangle.vcxproj -> W:\Garfieldone\Garfield_OpenGL\Garfield\legacy\Debug\triangle.exe
   ..\contrib\msvc-windows-x86\SDL2\bin\SDL2.dll
           1 file(s) copied.
   ..\contrib\msvc-windows-x86\glew\bin\glew32.dll
